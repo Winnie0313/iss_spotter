@@ -1,5 +1,35 @@
+const { nextISSTimesForMyLocation } = require('./iss');
 
-const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes } = require('./iss');
+/** 
+ * Input: 
+ *   Array of data objects defining the next fly-overs of the ISS.
+ *   [ { risetime: <number>, duration: <number> }, ... ]
+ * Returns: 
+ *   undefined
+ * Sideffect: 
+ *   Console log messages to make that data more human readable.
+ *   Example output:
+ *   Next pass at Mon Jun 10 2019 20:11:44 GMT-0700 (Pacific Daylight Time) for 468 seconds!
+ */
+ const printPassTimes = function(passTimes) {
+  for (const pass of passTimes) {
+    const datetime = new Date(0);
+    datetime.setUTCSeconds(pass.risetime);
+    const duration = pass.duration;
+    console.log(`Next pass at ${datetime} for ${duration} seconds!`);
+  }
+};
+
+nextISSTimesForMyLocation((error, passTimes) => {
+  if (error) {
+    return console.log("It didn't work!", error);
+  }
+  // success, print out the deets!
+  printPassTimes(passTimes);
+});
+
+
+//const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes } = require('./iss');
 
 // fetchMyIP((error, ip) => {
 //   if (error) {
@@ -10,22 +40,16 @@ const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes } = require('./iss');
 //   console.log('It worked! Returned IP:' , ip);
 // });
 
-// fetchCoordsByIP("154.20.177.248", (error, data) => {
+// const { fetchCoordsByIP } = require('./iss');
+
+// fetchCoordsByIP('162.245.144.188', (error, coordinates) => {
 //   if (error) {
 //     console.log("It didn't work!" , error);
 //     return;
 //   }
 
-//   if (data.success){
-//     // if true, return object contains coordinates 
-//     let coordsObject = {};
-//     coordsObject.latitude = `${data.latitude}`;
-//     coordsObject.longitude = `${data.longitude}`;
-//     console.log('It worked! Returned coordinates: ', coordsObject);
-//   } else {
-//     // if false, return error msg returned by API
-//     console.log(`It didn't work! Error: Success status was false. Server message says: Invalid IP address when fetching for IP ${data.ip}`);
-//   };
+//   console.log('It worked! Returned coordinates:' , coordinates);
+// });
   
 // });
 
