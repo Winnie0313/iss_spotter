@@ -32,5 +32,24 @@ const fetchMyIP = function(callback) {
 
 };
 
+// IP: 154.20.177.248
+//takes in an IP address and returns the latitude and longitude for it.
+const fetchCoordsByIP = function(IP, callback) {
+  request("http://ipwho.is/" + IP, (error, response, body) => {
+    // error can be set if invalid domain, user is offline, etc.
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    
+    // change JSON string to object
+    const bodyObject = JSON.parse(body);
+    callback(null, bodyObject);
+  });
+};
 
-module.exports = { fetchMyIP };
+
+
+
+
+module.exports = { fetchMyIP, fetchCoordsByIP };
